@@ -1,11 +1,13 @@
 import { useState } from 'react'
+import Notification from './components/Notification'
 import Menu from './components/Menu'
+import Anecdote from './components/Anecdote'
 import AnecdoteList from './components/AnecdotesList'
 import About from './components/About'
 import Footer from './components/Footer'
 import CreateNew from './components/CreateNew'
 import { Routes, Route, useMatch } from 'react-router-dom'
-import Anecdote from './components/Anecdote'
+
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -35,6 +37,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} was created!`)
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
   }
 
   const anecdoteById = (id) =>
@@ -55,6 +61,7 @@ const App = () => {
       <div>
         <h1>Software anecdotes</h1>
         <Menu />
+        <Notification notification={notification} />
         <Routes>
           <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
           <Route path='/about' element={<About />} />
