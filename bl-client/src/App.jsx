@@ -36,18 +36,6 @@ const App = () => {
     dispatch(appendBlog(newBlog))
   }
 
-  const updateBlog = async (updatedBlog) => {
-    await blogService.update(updatedBlog)
-    //    setBlogs(
-    //      blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog)),
-    //  )
-  }
-
-  const removeBlog = async (blogID) => {
-    await blogService.remove(blogID)
-    //    setBlogs(blogs.filter((blog) => blog.id !== blogID))
-  }
-
   const handleLogout = (event) =>
     window.localStorage.removeItem("loggedBloglistUser")
 
@@ -95,13 +83,7 @@ const App = () => {
           [...blogs]
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                updateBlog={updateBlog}
-                username={user.username}
-                removeBlog={removeBlog}
-              />
+              <Blog key={blog.id} blog={blog} username={user.username} />
             ))}
       </div>
     </div>
