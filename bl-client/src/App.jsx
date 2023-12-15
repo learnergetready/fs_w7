@@ -1,19 +1,15 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Blog from "./components/Blog"
 import blogService from "./services/blogs"
-import loginService from "./services/login"
 import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import BlogForm from "./components/BlogForm"
-import { setNotification } from "./reducers/notificationReducer"
-import { setBloglist, appendBlog } from "./reducers/bloglistReducer"
+import { setBloglist } from "./reducers/bloglistReducer"
+import { setUser, clearUser } from "./reducers/userReducer"
 
 const App = () => {
   const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
 
   useEffect(() => {
     blogService.getAll().then((blogs) => dispatch(setBloglist(blogs)))
@@ -23,52 +19,24 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBloglistUser")
     if (loggedUserJSON) {
       const loggedUser = JSON.parse(loggedUserJSON)
-      setUser(loggedUser)
+      dispatch(setUser(loggedUser))
       blogService.setToken(loggedUser.token)
     }
   }, [])
 
   const blogs = useSelector(({ bloglist }) => bloglist)
+  const user = useSelector(({ user }) => user)
 
-  const addBlog = async (blog) => {
-    const newBlog = await blogService.create(blog)
-    newBlog.user = { ...user }
-    dispatch(appendBlog(newBlog))
-  }
-
-  const handleLogout = (event) =>
+  const handleLogout = (event) => {
     window.localStorage.removeItem("loggedBloglistUser")
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const userLoggingIn = await loginService.login({ username, password })
-      window.localStorage.setItem(
-        "loggedBloglistUser",
-        JSON.stringify(userLoggingIn),
-      )
-      setUser(userLoggingIn)
-      blogService.setToken(userLoggingIn.token)
-      setUsername("")
-      setPassword("")
-    } catch (exception) {
-      setNotification("Wrong credentials", 10, "red")
-    }
+    dispatch(clearUser())
   }
 
   return (
     <div>
       <Notification />
 
-      {!user && (
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        />
-      )}
+      {!user && <LoginForm />}
       {user && (
         <p>
           {user.name} logged in{" "}
@@ -77,7 +45,7 @@ const App = () => {
           </button>
         </p>
       )}
-      {user && <BlogForm sendBlog={addBlog} />}
+      {user && <BlogForm />}
       <div>
         {user &&
           [...blogs]

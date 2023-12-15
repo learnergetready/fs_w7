@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { showNotification } from "./notificationReducer"
 import blogService from "../services/blogs"
+import { useSelector } from "react-redux"
 
 const bloglistSlice = createSlice({
   name: "bloglist",
@@ -22,6 +23,21 @@ const bloglistSlice = createSlice({
     },
   },
 })
+
+export const addBlog = (blog, user) => {
+  return async (dispatch) => {
+    const newBlog = await blogService.create(blog)
+    newBlog.user = { ...user }
+    dispatch(appendBlog(newBlog))
+    dispatch(
+      showNotification(
+        `a new blog ${blog.title} by author ${blog.author} was added`,
+        10,
+        "green",
+      ),
+    )
+  }
+}
 
 export const updateBlog = (newVersion) => {
   return async (dispatch) => {

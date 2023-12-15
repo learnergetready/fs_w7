@@ -1,7 +1,7 @@
 import { useState } from "react"
-import PropTypes from "prop-types"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { showNotification } from "../reducers/notificationReducer"
+import { addBlog } from "../reducers/bloglistReducer"
 
 const BlogForm = ({ sendBlog }) => {
   const dispatch = useDispatch()
@@ -13,17 +13,12 @@ const BlogForm = ({ sendBlog }) => {
   const showWhenVisible = { display: visiblePost ? "" : "none" }
   const hideWhenVisible = { display: visiblePost ? "none" : "" }
 
-  const addBlog = async (event) => {
+  const user = useSelector(({ user }) => user)
+
+  const handleAdd = async (event) => {
     event.preventDefault()
     try {
-      await sendBlog({ title: title, author: author, url: url })
-      dispatch(
-        showNotification(
-          `a new blog ${title} by author ${author} was added`,
-          10,
-          "green",
-        ),
-      )
+      dispatch(addBlog({ title: title, author: author, url: url }, user))
       setVisiblePost(false)
       setTitle("")
       setAuthor("")
@@ -53,7 +48,7 @@ const BlogForm = ({ sendBlog }) => {
       <div style={showWhenVisible}>
         <h2>Create new</h2>
 
-        <form onSubmit={addBlog}>
+        <form onSubmit={handleAdd}>
           <div>
             title
             <input
@@ -95,10 +90,6 @@ const BlogForm = ({ sendBlog }) => {
       </div>
     </>
   )
-}
-
-BlogForm.propTypes = {
-  sendBlog: PropTypes.func.isRequired,
 }
 
 export default BlogForm
