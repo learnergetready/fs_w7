@@ -5,14 +5,13 @@ import loginService from "./services/login"
 import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import BlogForm from "./components/BlogForm"
+import { setNotification } from "./reducers/notificationReducer"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [notification, setNotification] = useState(null)
-  const [notificationColor, setNotificationColor] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -26,17 +25,6 @@ const App = () => {
       blogService.setToken(loggedUser.token)
     }
   }, [])
-
-  const showNotification = (notificationText, color) => {
-    setNotification(notificationText)
-    setNotificationColor(color || "red")
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
-    setTimeout(() => {
-      setNotificationColor(null)
-    }, 5000)
-  }
 
   const addBlog = async (blog) => {
     const newBlog = await blogService.create(blog)
@@ -72,15 +60,14 @@ const App = () => {
       setUsername("")
       setPassword("")
     } catch (exception) {
-      showNotification("Wrong credentials")
+      setNotification("Wrong credentials", 10, "red")
     }
   }
 
   return (
     <div>
-      {notification && (
-        <Notification message={notification} color={notificationColor} />
-      )}
+      <Notification />
+
       {!user && (
         <LoginForm
           handleLogin={handleLogin}
@@ -98,9 +85,7 @@ const App = () => {
           </button>
         </p>
       )}
-      {user && (
-        <BlogForm sendBlog={addBlog} showNotification={showNotification} />
-      )}
+      {user && <BlogForm sendBlog={addBlog} />}
       <div>
         {user &&
           blogs

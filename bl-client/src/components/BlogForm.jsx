@@ -1,7 +1,10 @@
 import { useState } from "react"
 import PropTypes from "prop-types"
+import { useDispatch } from "react-redux"
+import { showNotification } from "../reducers/notificationReducer"
 
-const BlogForm = ({ sendBlog, showNotification }) => {
+const BlogForm = ({ sendBlog }) => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
@@ -14,9 +17,12 @@ const BlogForm = ({ sendBlog, showNotification }) => {
     event.preventDefault()
     try {
       await sendBlog({ title: title, author: author, url: url })
-      showNotification(
-        `a new blog ${title} by author ${author} was added`,
-        "green",
+      dispatch(
+        showNotification(
+          `a new blog ${title} by author ${author} was added`,
+          10,
+          "green",
+        ),
       )
       setVisiblePost(false)
       setTitle("")
@@ -24,7 +30,13 @@ const BlogForm = ({ sendBlog, showNotification }) => {
       setUrl("")
     } catch {
       ;(exception) => {
-        showNotification("error in posting blog! fix error handling", "red")
+        dispatch(
+          showNotification(
+            "error in posting blog! fix error handling",
+            10,
+            "red",
+          ),
+        )
       }
     }
   }
@@ -87,7 +99,6 @@ const BlogForm = ({ sendBlog, showNotification }) => {
 
 BlogForm.propTypes = {
   sendBlog: PropTypes.func.isRequired,
-  showNotification: PropTypes.func.isRequired,
 }
 
 export default BlogForm
