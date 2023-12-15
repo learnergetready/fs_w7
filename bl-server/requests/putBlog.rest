@@ -1,0 +1,11 @@
+PUT HTTP://LOCALHOST:3001/api/blogs/655cef3cd5d1402bdb8c7b56
+Content-Type: application/json
+
+{
+  "title": "Seventh blog",
+  "author": "Someone else",
+  "url": "localhost:3001",
+  "likes": 9,
+  "user": "655227ac06b568d711614041",
+  "id": "655cef3cd5d1402bdb8c7b56"
+}
