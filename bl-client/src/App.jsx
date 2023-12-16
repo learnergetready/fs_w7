@@ -4,6 +4,7 @@ import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import BlogForm from "./components/BlogForm"
 import Bloglist from "./components/Bloglist"
+import Blog from "./components/Blog"
 import Users from "./components/Users"
 import User from "./components/User"
 import { refreshBloglist } from "./reducers/bloglistReducer"
@@ -16,6 +17,11 @@ const App = () => {
   const dispatch = useDispatch()
 
   const padding = { padding: 5 }
+
+  const navbarStyle = {
+    padding: 5,
+    background: "green",
+  }
 
   useEffect(() => {
     dispatch(refreshBloglist())
@@ -44,20 +50,19 @@ const App = () => {
 
   return (
     <div>
-      <div>
+      <div style={navbarStyle}>
         <Link style={padding} to={"/"}>
           Blogs
         </Link>
         <Link style={padding} to={"/users"}>
           Users
         </Link>
-      </div>
-      <p>
         {user.name} logged in{" "}
         <button onClick={handleLogout} data-cy="log out">
           log out
         </button>
-      </p>
+      </div>
+
       <Notification />
       <Routes>
         <Route
@@ -69,6 +74,7 @@ const App = () => {
             </div>
           }
         />
+        <Route path="/blogs/:blogID" element={<Blog />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:userID" element={<User />} />
       </Routes>

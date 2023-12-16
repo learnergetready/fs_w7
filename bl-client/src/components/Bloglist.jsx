@@ -1,4 +1,4 @@
-import Blog from "./Blog"
+import { BlogInBloglist } from "./Blog"
 import { useSelector } from "react-redux"
 
 const Bloglist = () => {
@@ -12,7 +12,7 @@ const Bloglist = () => {
   return (
     <div>
       {sortedBloglist.map((blog) => (
-        <Blog key={blog.id} blog={blog} username={username} />
+        <BlogInBloglist key={blog.id} blog={blog} username={username} />
       ))}
     </div>
   )
