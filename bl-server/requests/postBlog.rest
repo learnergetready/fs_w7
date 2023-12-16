@@ -1,9 +1,13 @@
 POST HTTP://LOCALHOST:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hYyIsImlkIjoiNjU1ZTE1Y2VlYTUzNjc3OTYzNTk5ZjQ2IiwiaWF0IjoxNzAwODQwOTE1LCJleHAiOjE3MDA4NDQ1MTV9.QSdrmRrvkGjpcjvB1bEZrTMxEbl99pV0viAGZc2T8SI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hYyIsImlkIjoiNjU1ZTE1Y2VlYTUzNjc3OTYzNTk5ZjQ2IiwiaWF0IjoxNzAyNzYyMDU3LCJleHAiOjE3MDI3NjU2NTd9.-wuf9YJ0PMJbm9v9eFeYFox59m3BBKB5yIRz_e6qxJY
 
 {
-  "title": "Fiftieth blog",
-  "author": "Someone who is cat",
-  "url": "localhost:3001"
+    "comments": ["This blog is dogshit!!!!!1",
+      "This blog is the B0MB!",
+      "Yeah, this blog rules!"],
+    "title": "Auervaara was right",
+    "author": "Sr. Pippin",
+    "url": "ululululuuu",
+    "likes": 2
 }
