@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm"
 import BlogForm from "./components/BlogForm"
 import Bloglist from "./components/Bloglist"
 import Users from "./components/Users"
+import User from "./components/User"
 import { refreshBloglist } from "./reducers/bloglistReducer"
 import { refreshUserlist } from "./reducers/userlistReducer"
 import { setUser, clearUser } from "./reducers/userReducer"
@@ -69,6 +70,7 @@ const App = () => {
           }
         />
         <Route path="/users" element={<Users />} />
+        <Route path="/users/:userID" element={<User />} />
       </Routes>
     </div>
   )

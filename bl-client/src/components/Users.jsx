@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 
 const Users = () => {
   const byBlogAmounts = (a, b) => b[1] - a[1]
@@ -26,7 +27,9 @@ const Users = () => {
           .map(([user, amount, userID]) => {
             return (
               <tr key={userID}>
-                <td>{user}</td>
+                <td>
+                  <Link to={`/users/${userID}`}>{user}</Link>
+                </td>
                 <td>{amount}</td>
               </tr>
             )
