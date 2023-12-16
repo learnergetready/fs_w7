@@ -21,6 +21,14 @@ const bloglistSlice = createSlice({
     nixBlog(state, action) {
       return state.filter((blog) => blog.id !== action.payload)
     },
+    appendComment(state, action) {
+      const { blogID, newComment } = action.payload
+      return state.map((blog) =>
+        blog.id !== blogID
+          ? blog
+          : { ...blog, comments: blog.comments.concat(newComment) },
+      )
+    },
   },
 })
 
@@ -76,7 +84,14 @@ export const removeBlog = (blog) => {
   }
 }
 
-export const { setBloglist, appendBlog, putBlog, nixBlog } =
+export const addComment = (blogID, newComment) => {
+  return async (dispatch) => {
+    await blogService.comment(blogID, newComment)
+    dispatch(appendComment({ blogID, newComment }))
+  }
+}
+
+export const { setBloglist, appendBlog, putBlog, nixBlog, appendComment } =
   bloglistSlice.actions
 
 export default bloglistSlice.reducer

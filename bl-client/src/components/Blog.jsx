@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import PropTypes from "prop-types"
-import { updateBlog, removeBlog } from "../reducers/bloglistReducer"
+import { updateBlog, removeBlog, addComment } from "../reducers/bloglistReducer"
 import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
@@ -18,6 +18,13 @@ const Blog = () => {
   const handleLike = (event) => {
     const likedBlog = { ...blog, likes: blog.likes + 1 }
     dispatch(updateBlog(likedBlog))
+  }
+
+  const handleCommenting = (event) => {
+    event.preventDefault()
+    const newComment = event.target.newComment.value
+    dispatch(addComment(blog.id, newComment))
+    event.target.newComment.value = ""
   }
 
   if (!blog) {
@@ -38,6 +45,12 @@ const Blog = () => {
       <br />
       <p>added by {blog.user.name}</p>
       <h3>comments</h3>
+      <form method="post" onSubmit={handleCommenting}>
+        <input name="newComment" />
+        <button style={buttonStyle} type="submit">
+          add comment
+        </button>
+      </form>
       <ul>
         {blog.comments.map((comment, index) => (
           <li key={index}>{comment}</li>
