@@ -65,12 +65,19 @@ blogsRouter.post("/", async (request, response) => {
 })
 
 blogsRouter.put("/:id", async (request, response) => {
+  if (!request.user) {
+    return response.status(401).json({ error: "token invalid" })
+  }
+
   const incomingBlog = request.body
   await Blog.findByIdAndUpdate(request.params.id, incomingBlog)
   response.status(200).end()
 })
 
 blogsRouter.post("/:id/comments", async (request, response) => {
+  if (!request.user) {
+    return response.status(401).json({ error: "token invalid" })
+  }
   const { comment } = request.body
   const blog = await Blog.findById(request.params.id)
   blog.comments = blog.comments.concat(comment)
