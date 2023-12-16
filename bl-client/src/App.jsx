@@ -1,18 +1,24 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import Blog from "./components/Blog"
-import blogService from "./services/blogs"
 import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import BlogForm from "./components/BlogForm"
-import { setBloglist } from "./reducers/bloglistReducer"
+import Bloglist from "./components/Bloglist"
+import Users from "./components/Users"
+import { refreshBloglist } from "./reducers/bloglistReducer"
+import { refreshUserlist } from "./reducers/userlistReducer"
 import { setUser, clearUser } from "./reducers/userReducer"
+import { Routes, Route, Link } from "react-router-dom"
+import { setToken as setBlogserviceToken } from "./services/blogs"
 
 const App = () => {
   const dispatch = useDispatch()
 
+  const padding = { padding: 5 }
+
   useEffect(() => {
-    blogService.getAll().then((blogs) => dispatch(setBloglist(blogs)))
+    dispatch(refreshBloglist())
+    dispatch(refreshUserlist())
   }, [])
 
   useEffect(() => {
@@ -20,11 +26,10 @@ const App = () => {
     if (loggedUserJSON) {
       const loggedUser = JSON.parse(loggedUserJSON)
       dispatch(setUser(loggedUser))
-      blogService.setToken(loggedUser.token)
+      setBlogserviceToken(loggedUser.token)
     }
   }, [])
 
-  const blogs = useSelector(({ bloglist }) => bloglist)
   const user = useSelector(({ user }) => user)
 
   const handleLogout = (event) => {
@@ -32,28 +37,39 @@ const App = () => {
     dispatch(clearUser())
   }
 
+  if (!user) {
+    return <LoginForm />
+  }
+
   return (
     <div>
-      <Notification />
-
-      {!user && <LoginForm />}
-      {user && (
-        <p>
-          {user.name} logged in{" "}
-          <button onClick={handleLogout} data-cy="log out">
-            log out
-          </button>
-        </p>
-      )}
-      {user && <BlogForm />}
       <div>
-        {user &&
-          [...blogs]
-            .sort((a, b) => b.likes - a.likes)
-            .map((blog) => (
-              <Blog key={blog.id} blog={blog} username={user.username} />
-            ))}
+        <Link style={padding} to={"/"}>
+          Blogs
+        </Link>
+        <Link style={padding} to={"/users"}>
+          Users
+        </Link>
       </div>
+      <p>
+        {user.name} logged in{" "}
+        <button onClick={handleLogout} data-cy="log out">
+          log out
+        </button>
+      </p>
+      <Notification />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div>
+              <BlogForm />
+              <Bloglist />
+            </div>
+          }
+        />
+        <Route path="/users" element={<Users />} />
+      </Routes>
     </div>
   )
 }

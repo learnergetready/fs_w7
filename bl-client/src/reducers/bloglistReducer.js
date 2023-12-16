@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { showNotification } from "./notificationReducer"
 import blogService from "../services/blogs"
-import { useSelector } from "react-redux"
+import { appendUserlistBlog, removeUserlistBlog } from "./userlistReducer"
 
 const bloglistSlice = createSlice({
   name: "bloglist",
@@ -24,11 +24,26 @@ const bloglistSlice = createSlice({
   },
 })
 
+export const refreshBloglist = () => {
+  return async (dispatch) => {
+    const newBloglist = await blogService.getAll()
+    dispatch(setBloglist(newBloglist))
+  }
+}
+
 export const addBlog = (blog, user) => {
   return async (dispatch) => {
-    const newBlog = await blogService.create(blog)
-    newBlog.user = { ...user }
+    const newBlogWithoutUsername = await blogService.create(blog)
+    const newBlog = {
+      ...newBlogWithoutUsername,
+      user: {
+        username: user.username,
+        name: user.name,
+        id: newBlogWithoutUsername.user,
+      },
+    }
     dispatch(appendBlog(newBlog))
+    dispatch(appendUserlistBlog(newBlog))
     dispatch(
       showNotification(
         `a new blog ${blog.title} by author ${blog.author} was added`,
@@ -49,6 +64,7 @@ export const updateBlog = (newVersion) => {
 export const removeBlog = (blog) => {
   return async (dispatch) => {
     await blogService.remove(blog.id)
+    dispatch(removeUserlistBlog(blog.id))
     dispatch(
       showNotification(
         `removed blog ${blog.title} by ${blog.author}`,

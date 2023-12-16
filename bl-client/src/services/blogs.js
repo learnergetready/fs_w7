@@ -3,7 +3,7 @@ const baseUrl = "http://localhost:3001/api/blogs" //'/api/blogs'
 
 let token = null
 
-const setToken = (newToken) => {
+export const setToken = (newToken) => {
   token = `Bearer ${newToken}`
 }
 

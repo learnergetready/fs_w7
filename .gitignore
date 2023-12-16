@@ -7,7 +7,6 @@ build
 
 # Other files #
 .env
-bl-app\ WITH\ dotenv\ file.tar.xz
 
 # Compiled source #
 ###################
