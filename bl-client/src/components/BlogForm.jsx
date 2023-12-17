@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { showNotification } from "../reducers/notificationReducer"
 import { addBlog } from "../reducers/bloglistReducer"
+import { Button, View } from "@adobe/react-spectrum"
 
 const BlogForm = ({ sendBlog }) => {
   const dispatch = useDispatch()
@@ -37,14 +38,12 @@ const BlogForm = ({ sendBlog }) => {
   }
 
   return (
-    <>
-      <button
-        style={hideWhenVisible}
-        onClick={() => setVisiblePost(true)}
-        data-cy="new blog"
-      >
-        new blog
-      </button>
+    <View marginY="size-200">
+      <div style={hideWhenVisible}>
+        <Button onPress={() => setVisiblePost(true)} data-cy="new blog">
+          new blog
+        </Button>
+      </div>
       <div style={showWhenVisible}>
         <h2>Create new</h2>
 
@@ -82,13 +81,13 @@ const BlogForm = ({ sendBlog }) => {
               data-cy="blog-url"
             />
           </div>
-          <button type="submit" data-cy="submit-blog">
+          <Button type="submit" data-cy="submit-blog">
             post
-          </button>
+          </Button>
         </form>
-        <button onClick={() => setVisiblePost(false)}>cancel</button>
+        <Button onPress={() => setVisiblePost(false)}>cancel</Button>
       </div>
-    </>
+    </View>
   )
 }
 

@@ -9,19 +9,19 @@ import Users from "./components/Users"
 import User from "./components/User"
 import { refreshBloglist } from "./reducers/bloglistReducer"
 import { refreshUserlist } from "./reducers/userlistReducer"
-import { setUser, clearUser } from "./reducers/userReducer"
-import { Link, Routes, Route } from "react-router-dom"
+import { setUser } from "./reducers/userReducer"
+import { Route, Routes, useNavigate } from "react-router-dom"
 import { setToken as setBlogserviceToken } from "./services/blogs"
 import {
-  Footer,
   Provider as SpectrumRouterProvider,
+  Footer,
   View,
 } from "@adobe/react-spectrum"
+import Navbar from "./components/Navbar"
 
 const App = () => {
   const dispatch = useDispatch()
-
-  const padding = { padding: 5 }
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(refreshBloglist())
@@ -39,11 +39,6 @@ const App = () => {
 
   const user = useSelector(({ user }) => user)
 
-  const handleLogout = (event) => {
-    window.localStorage.removeItem("loggedBloglistUser")
-    dispatch(clearUser())
-  }
-
   if (!user) {
     return (
       <div>
@@ -55,34 +50,27 @@ const App = () => {
 
   return (
     <div>
-      <SpectrumRouterProvider>
+      <SpectrumRouterProvider router={{ navigate }}>
         <View>
-          <Link to={"/"}>Blogs</Link>
-          <Link to={"/users"}>Users</Link>
-          {user.name} logged in{" "}
-          <button onClick={handleLogout} data-cy="log out">
-            log out
-          </button>
-        </View>
-        <View>
+          <Navbar />
           <Notification />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <View>
-                  <BlogForm />
-                  <Bloglist />
-                </View>
-              }
-            />
-            <Route path="/blogs/:blogID" element={<Blog />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/users/:userID" element={<User />} />
-          </Routes>
         </View>
-        <Footer>
-          Made for the Helsinki University Full Stack Course, (c) 2023
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <View>
+                <BlogForm />
+                <Bloglist />
+              </View>
+            }
+          />
+          <Route path="/blogs/:blogID" element={<Blog />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:userID" element={<User />} />
+        </Routes>
+        <Footer marginY="size-200">
+          Made for the Helsinki University Full Stack Course, &copy; 2023
         </Footer>
       </SpectrumRouterProvider>
     </div>

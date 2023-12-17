@@ -24,12 +24,12 @@ const store = configureStore({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <SpectrumProvider theme={defaultTheme}>
-    <BrowserRouter>
-      <Flex direction="column" gap="size-400">
-        <Provider store={store}>
+    <Flex direction="column" gap="size-400">
+      <Provider store={store}>
+        <BrowserRouter>
           <App />
-        </Provider>
-      </Flex>
-    </BrowserRouter>
+        </BrowserRouter>
+      </Provider>
+    </Flex>
   </SpectrumProvider>,
 )

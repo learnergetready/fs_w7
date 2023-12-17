@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, View } from "@adobe/react-spectrum"
 
 const Users = () => {
   const byBlogAmounts = (a, b) => b[1] - a[1]
@@ -15,27 +15,29 @@ const Users = () => {
   }
 
   return (
-    <table>
-      <tbody>
-        <tr>
-          <th>User</th>
-          <th>Blogs added</th>
-        </tr>
-        {userlist
-          .reduce(userReducer, [])
-          .sort(byBlogAmounts)
-          .map(([user, amount, userID]) => {
-            return (
-              <tr key={userID}>
-                <td>
-                  <Link to={`/users/${userID}`}>{user}</Link>
-                </td>
-                <td>{amount}</td>
-              </tr>
-            )
-          })}
-      </tbody>
-    </table>
+    <View marginY="size-250" marginX="size-125">
+      <table>
+        <tbody>
+          <tr>
+            <th>User</th>
+            <th>Blogs added</th>
+          </tr>
+          {userlist
+            .reduce(userReducer, [])
+            .sort(byBlogAmounts)
+            .map(([user, amount, userID]) => {
+              return (
+                <tr key={userID}>
+                  <td>
+                    <Link href={`/users/${userID}`}>{user}</Link>
+                  </td>
+                  <td>{amount}</td>
+                </tr>
+              )
+            })}
+        </tbody>
+      </table>
+    </View>
   )
 }
 

@@ -4,8 +4,12 @@ import PropTypes from "prop-types"
 import { updateBlog, removeBlog, addComment } from "../reducers/bloglistReducer"
 import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
-import { View } from "@adobe/react-spectrum"
+import { Button, Link, View } from "@adobe/react-spectrum"
+import Heart from "@spectrum-icons/workflow/Heart"
+import Delete from "@spectrum-icons/workflow/Delete"
+import Send from "@spectrum-icons/workflow/Send"
+import MoreVertical from "@spectrum-icons/workflow/MoreVertical"
+import MoreSmallListVert from "@spectrum-icons/workflow/MoreSmallListVert"
 
 const Blog = () => {
   const dispatch = useDispatch()
@@ -37,20 +41,23 @@ const Blog = () => {
       <h2>
         {blog.title} {blog.author}
       </h2>
-      <a href={blog.url}>{blog.url}</a>
+      <Link href={blog.url}>{blog.url}</Link>
       <br />
       {blog.likes} likes
-      <button style={buttonStyle} onClick={handleLike} data-cy="like">
+      <br />
+      <Button onPress={handleLike} data-cy="like">
+        <Heart aria-label="Heart" />
         like
-      </button>
+      </Button>
       <br />
       <p>added by {blog.user.name}</p>
       <h3>comments</h3>
       <form method="post" onSubmit={handleCommenting}>
         <input name="newComment" />
-        <button style={buttonStyle} type="submit">
-          add comment
-        </button>
+        <Button type="submit">
+          <Send />
+          comment
+        </Button>
       </form>
       <ul>
         {blog.comments.map((comment, index) => (
@@ -64,20 +71,6 @@ const Blog = () => {
 export const BlogInBloglist = ({ blog, username }) => {
   const dispatch = useDispatch()
   const [showMuch, setShowMuch] = useState(false)
-  const bigBlogStyle = {
-    borderStyle: "solid",
-    borderRadius: "5px",
-    padding: "10px",
-    marginBottom: "2px",
-  }
-  const smallBlogStyle = {
-    borderStyle: "solid",
-    borderRadius: "1px",
-    padding: "3px",
-    marginBottom: "2px",
-  }
-
-  const buttonStyle = { marginLeft: "6px" }
 
   const handleLike = (event) => {
     const likedBlog = { ...blog, likes: blog.likes + 1 }
@@ -94,43 +87,53 @@ export const BlogInBloglist = ({ blog, username }) => {
   if (showMuch) {
     return (
       <View borderRadius="regular" borderWidth="thin">
-        title: <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        <button style={buttonStyle} onClick={() => setShowMuch(false)}>
+        title: <Link href={`/blogs/${blog.id}`}>{blog.title}</Link>
+        <Button marginX="size-150" onPress={() => setShowMuch(false)}>
+          <MoreVertical />
           hide
-        </button>
+        </Button>
         <br />
         author: {blog.author}
         <br />
-        url: {blog.url}
+        url: <Link href={blog.url}>{blog.url}</Link>
         <br />
         likes: {blog.likes}
-        <button style={buttonStyle} onClick={handleLike} data-cy="like">
+        <br />
+        <Button onPress={handleLike} data-cy="like">
+          <Heart aria-label="Heart" />
           like
-        </button>
+        </Button>
         <br />
         added by: {blog.user.name}
         <br />
         {username === blog.user.username && (
-          <button onClick={handleRemove} data-cy="remove">
-            remove
-          </button>
+          <Button variant="negative" onPress={handleRemove} data-cy="remove">
+            <Delete />
+            delete
+          </Button>
         )}
       </View>
     )
   }
 
   return (
-    <View borderRadius="regular" borderWidth="thin" height="size-500">
-      <Link to={`/blogs/${blog.id}`}>
+    <View
+      borderRadius="regular"
+      borderWidth="thin"
+      height="size-500"
+      width="100%"
+    >
+      <Link href={`/blogs/${blog.id}`}>
         {blog.title} {blog.author}
       </Link>
-      <button
-        style={buttonStyle}
-        onClick={() => setShowMuch(true)}
+      <Button
+        marginX="size-150"
+        onPress={() => setShowMuch(true)}
         data-cy="view"
       >
-        view
-      </button>
+        <MoreSmallListVert />
+        show
+      </Button>
     </View>
   )
 }
