@@ -5,6 +5,7 @@ import { updateBlog, removeBlog, addComment } from "../reducers/bloglistReducer"
 import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { View } from "@adobe/react-spectrum"
 
 const Blog = () => {
   const dispatch = useDispatch()
@@ -92,7 +93,7 @@ export const BlogInBloglist = ({ blog, username }) => {
 
   if (showMuch) {
     return (
-      <p className="blog" style={bigBlogStyle}>
+      <View borderRadius="regular" borderWidth="thin">
         title: <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
         <button style={buttonStyle} onClick={() => setShowMuch(false)}>
           hide
@@ -114,12 +115,12 @@ export const BlogInBloglist = ({ blog, username }) => {
             remove
           </button>
         )}
-      </p>
+      </View>
     )
   }
 
   return (
-    <p className="blog" style={smallBlogStyle}>
+    <View borderRadius="regular" borderWidth="thin" height="size-500">
       <Link to={`/blogs/${blog.id}`}>
         {blog.title} {blog.author}
       </Link>
@@ -130,7 +131,7 @@ export const BlogInBloglist = ({ blog, username }) => {
       >
         view
       </button>
-    </p>
+    </View>
   )
 }
 

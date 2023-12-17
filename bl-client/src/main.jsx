@@ -6,7 +6,12 @@ import bloglistReducer from "./reducers/bloglistReducer"
 import userlistReducer from "./reducers/userlistReducer"
 import notificationReducer from "./reducers/notificationReducer"
 import userReducer from "./reducers/userReducer"
-import { BrowserRouter as Router } from "react-router-dom"
+import { BrowserRouter } from "react-router-dom"
+import {
+  Provider as SpectrumProvider,
+  Flex,
+  defaultTheme,
+} from "@adobe/react-spectrum"
 
 const store = configureStore({
   reducer: {
@@ -18,9 +23,13 @@ const store = configureStore({
 })
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
-  </Provider>,
+  <SpectrumProvider theme={defaultTheme}>
+    <BrowserRouter>
+      <Flex direction="column" gap="size-400">
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </Flex>
+    </BrowserRouter>
+  </SpectrumProvider>,
 )

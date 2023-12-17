@@ -10,18 +10,18 @@ import User from "./components/User"
 import { refreshBloglist } from "./reducers/bloglistReducer"
 import { refreshUserlist } from "./reducers/userlistReducer"
 import { setUser, clearUser } from "./reducers/userReducer"
-import { Routes, Route, Link } from "react-router-dom"
+import { Link, Routes, Route } from "react-router-dom"
 import { setToken as setBlogserviceToken } from "./services/blogs"
+import {
+  Footer,
+  Provider as SpectrumRouterProvider,
+  View,
+} from "@adobe/react-spectrum"
 
 const App = () => {
   const dispatch = useDispatch()
 
   const padding = { padding: 5 }
-
-  const navbarStyle = {
-    padding: 5,
-    background: "green",
-  }
 
   useEffect(() => {
     dispatch(refreshBloglist())
@@ -45,39 +45,46 @@ const App = () => {
   }
 
   if (!user) {
-    return <LoginForm />
+    return (
+      <div>
+        <Notification />
+        <LoginForm />
+      </div>
+    )
   }
 
   return (
     <div>
-      <div style={navbarStyle}>
-        <Link style={padding} to={"/"}>
-          Blogs
-        </Link>
-        <Link style={padding} to={"/users"}>
-          Users
-        </Link>
-        {user.name} logged in{" "}
-        <button onClick={handleLogout} data-cy="log out">
-          log out
-        </button>
-      </div>
-
-      <Notification />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              <BlogForm />
-              <Bloglist />
-            </div>
-          }
-        />
-        <Route path="/blogs/:blogID" element={<Blog />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/users/:userID" element={<User />} />
-      </Routes>
+      <SpectrumRouterProvider>
+        <View>
+          <Link to={"/"}>Blogs</Link>
+          <Link to={"/users"}>Users</Link>
+          {user.name} logged in{" "}
+          <button onClick={handleLogout} data-cy="log out">
+            log out
+          </button>
+        </View>
+        <View>
+          <Notification />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <View>
+                  <BlogForm />
+                  <Bloglist />
+                </View>
+              }
+            />
+            <Route path="/blogs/:blogID" element={<Blog />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/users/:userID" element={<User />} />
+          </Routes>
+        </View>
+        <Footer>
+          Made for the Helsinki University Full Stack Course, (c) 2023
+        </Footer>
+      </SpectrumRouterProvider>
     </div>
   )
 }
